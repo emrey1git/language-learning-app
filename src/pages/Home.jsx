@@ -1,47 +1,78 @@
-
 import { useNavigate } from "react-router-dom";
+import homePagesImageYellow from "../assets/homePagesImageYellow.png";
+import homePagesImageGreen from "../assets/homePagesImageGreen.png";
+import homePagesImageBlue from "../assets/homePagesImageBlue.png";
+import homePagesImagePink from "../assets/homePagesImagePink.png";
+import homePagesImageOrange from "../assets/homePagesImageOrange.png";
 
-const Home = () => {
+import "./pagesCss/home.css";
+
+const Home = ({ activeTheme }) => { // 1. Patronun gönderdiği rengi buradan içeri alıyoruz
   const navigate = useNavigate();
-  return (
-    <div style={{ padding: "40px", textAlign: "centrer" }}>
-      <h1> Unlock your potential with the best language tutors</h1>
-      <p>Embark on an exciting language journey with expert tutors.</p>
 
-      {/* Avantajlar Listesi (Şartnamedeki avantajlar) */}
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "center",
-          gap: "30px",
-          margin: "40px 0",
-        }}
-      >
-        <div>
-          <strong>32,000+</strong> <br /> Experienced tutors
+  // 2. Renk ile Fotoğrafı eşleştiren basit bir sözlük yapalım
+  const themeImages = {
+    "rgba(244, 197, 80, 1)": homePagesImageYellow,
+    "rgba(159, 186, 174, 1)": homePagesImageGreen,
+    "rgba(159, 183, 206, 1)": homePagesImageBlue,
+    "rgba(224, 163, 154, 1)": homePagesImagePink,
+    "rgba(240, 170, 141, 1)": homePagesImageOrange
+  };
+
+  // Şu anki aktif rengin fotoğrafını buluyoruz
+  const currentImg = themeImages[activeTheme.color];
+
+  return (
+    <div className="home-container">
+      <div className="home-main-section">
+        <div className="home-content">
+          <h1 className="home-title">
+            Unlock your potential with the best{" "}
+            <span
+              style={{ 
+                backgroundColor: activeTheme.color, // 3. Rengi buradan alıyor
+                fontStyle: "italic",
+                padding: "2px 8px",
+                borderRadius: "8px"
+              }}
+            >
+              language
+            </span>{" "}
+            tutors
+          </h1>
+          <p className="home-subtitle">
+            Embark on an exciting language journey with expert tutors.
+          </p>
+          
+          <button
+            className="get-started-btn"
+            style={{ backgroundColor: activeTheme.color }} // 4. Butonu buradan boyuyor
+            onClick={() => navigate("/teachers")}
+          >
+            Get Started
+          </button>
         </div>
-        <div>
-          <strong>300,000+</strong> <br /> 5-star reviews
-        </div>
-        <div>
-          <strong>120+</strong> <br /> Subjects taught
-        </div>
-        <div>
-          <strong>200+</strong> <br /> Native speakers
+
+        <div className="home-image-container">
+          {/* 5. Resmi buradan değiştiriyor */}
+          <img src={currentImg} alt="Tutor" className="home-image" />
         </div>
       </div>
-      <button
-        onClick={() => navigate("/teachers")}
-        style={{
-          padding: "15px 30px",
-          backgroundColor: "#FBE134",
-          border: "none",
-          cursor: "pointer",
-          fontSize: "18px",
-        }}
-      >
-        Get Started
-      </button>
+
+      <div className="stats-board" style={{ borderColor: activeTheme.color }}>
+        <div className="stat-item">
+          <strong>32,000+</strong> <br /> <span>Experienced tutors</span>
+        </div>
+        <div className="stat-item">
+          <strong>300,000+</strong> <br /> <span>5-star reviews</span>
+        </div>
+        <div className="stat-item">
+          <strong>120+</strong> <br /> <span>Subjects taught</span>
+        </div>
+        <div className="stat-item">
+          <strong>200+</strong> <br /> <span>Native speakers</span>
+        </div>
+      </div>
     </div>
   );
 };
