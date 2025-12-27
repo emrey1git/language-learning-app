@@ -1,0 +1,46 @@
+/* --- SAYFA GENEL YAPISI --- */
+body {
+    background-color: #F8F8F8 !important;
+}
+
+.teachers-page-container {
+    max-width: 1440px;
+    margin: 0 auto;
+    padding: 20px 100px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #F8F8F8;
+    min-height: 100vh;
+}
+
+.teachers-list {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+}
+
+.filters-section {
+    width: 100%;
+    margin-bottom: 32px;
+    /* Filtreler gelince burası dolacak */
+}
+
+/* --- LOAD MORE BUTONU --- */
+.load-more-btn {
+    display: block;
+    margin: 40px auto; 
+    padding: 16px 48px;
+    background-color: #F4C550;
+    border: none;
+    border-radius: 12px;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.load-more-btn:hover {
+    background-color: #ffdc86; 
+}

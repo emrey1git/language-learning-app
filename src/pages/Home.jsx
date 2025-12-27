@@ -30,7 +30,7 @@ const Home = ({ activeTheme }) => { // 1. Patronun gönderdiği rengi buradan i�
             Unlock your potential with the best{" "}
             <span
               style={{ 
-                backgroundColor: activeTheme.color, // 3. Rengi buradan alıyor
+                backgroundColor: activeTheme.color, 
                 fontStyle: "italic",
                 padding: "2px 8px",
                 borderRadius: "8px"

@@ -1,6 +1,8 @@
-import { BrowserRouter as Router, Routes, Route, NavLink, Link } from "react-router-dom"; // NavLink eklendi
+import { BrowserRouter as Router, Routes, Route, NavLink, Link } from "react-router-dom";
 import { useState } from "react";
 import Home from "./pages/Home.jsx";
+import Login from "./pages/Auth/Login/Login.jsx";
+import Register from "./pages/Auth/Register/Register.jsx";
 import Favorites from "./pages/Favorites.jsx";
 import Teachers from "./pages/Teachers.jsx";
 import ukraine from "./assets/ukraine.png";
@@ -19,13 +21,16 @@ function App() {
   const [themeIndex, setThemeIndex] = useState(0);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
+  // Modal'ların açık/kapalı durumunu tutan hafıza (State)
+  const [isLoginOpen, setIsLoginOpen] = useState(false);
+  const [isRegisterOpen, setIsRegisterOpen] = useState(false);
+
   const toggleTheme = () => {
     setThemeIndex((prev) => (prev + 1) % themes.length);
   };
 
   const activeTheme = themes[themeIndex];
 
-  // Aktif link stilini belirleyen yardımcı fonksiyon (Kod kalabalığı yapmasın diye)
   const getActiveLinkStyle = ({ isActive }) => ({
     color: isActive ? activeTheme.color : "black",
     fontWeight: isActive ? "bold" : "normal"
@@ -42,7 +47,7 @@ function App() {
           <Link to="/" className="logo-text">LearnLingo</Link>
         </div>
 
-        {/* ORTA MENÜ - NavLink ve isActive ile Güncellendi */}
+        {/* ORTA MENÜ */}
         <div className="pages-buttons">
           <NavLink to="/" className="home-button" style={getActiveLinkStyle}>
             Home
@@ -50,7 +55,6 @@ function App() {
           <NavLink to="/teachers" className="teachers-button" style={getActiveLinkStyle}>
             Teachers
           </NavLink>
-          {/* Giriş yapılmışsa Favorites sekmesi belirir */}
           {isLoggedIn && (
             <NavLink to="/favorites" className="favorites-button" style={getActiveLinkStyle}>
               Favorites
@@ -58,6 +62,7 @@ function App() {
           )}
         </div>
 
+        {/* SAĞ TARAF: AUTH BUTONLARI */}
         <div className="auth-buttons">
           <button 
             onClick={toggleTheme} 
@@ -67,13 +72,20 @@ function App() {
 
           {!isLoggedIn ? (
             <>
-              <Link to="/login" className="login-button">
+              {/* Login Modalını Açan Buton */}
+              <button onClick={() => setIsLoginOpen(true)} className="login-button">
                 <FiLogIn className="login-icon" style={{ color: activeTheme.color }} />
-                Log in
-              </Link>
-              <Link to="/registration" className="registration-button" style={{ backgroundColor: activeTheme.color }}>
+                <span>Log in</span>
+              </button>
+
+              {/* Register Modalını Açan Buton */}
+              <button 
+                onClick={() => setIsRegisterOpen(true)} 
+                className="registration-button" 
+                style={{ backgroundColor: activeTheme.color }}
+              >
                 Registration
-              </Link>
+              </button>
             </>
           ) : (
             <div className="user-profile-box">
@@ -91,12 +103,14 @@ function App() {
         </div>
       </nav>
 
+      {/* MODAL'LAR (Ekranda sadece state true olduğunda belirirler) */}
+      {isLoginOpen && <Login onClose={() => setIsLoginOpen(false)} />}
+      {isRegisterOpen && <Register onClose={() => setIsRegisterOpen(false)} />}
+
       <Routes>
         <Route path="/" element={<Home activeTheme={activeTheme} />} />
         <Route path="/teachers" element={<Teachers activeTheme={activeTheme} />} />
         <Route path="/favorites" element={<Favorites activeTheme={activeTheme} />} />
-        <Route path="/login" element={<div>Login Page</div>} />
-        <Route path="/registration" element={<div>Registration Page</div>} />
       </Routes>
     </Router>
   );

@@ -1,7 +1,9 @@
 /* --- 1. GENEL AYARLAR --- */
 * {
     text-decoration: none;
-    color: black;
+    box-sizing: border-box; /* Padding'lerin genişliği bozmamasını sağlar */
+    font-family: 'Roboto', sans-serif;
+    -webkit-font-smoothing: antialiased;
 }
 
 /* --- 2. NAVIGASYON ANA YAPI --- */
@@ -12,54 +14,51 @@
     padding: 20px 100px; 
     max-width: 1440px;
     margin: 0 auto;
-    border-bottom: 1px solid #ccc; 
 }
 
 .logo {
-    font-weight: bold;
-    font-size: 20px;
-    gap: 10px;
     display: flex;
     align-items: center;
+    gap: 10px;
+    font-weight: bold;
+    font-size: 20px;
+    cursor: pointer;
 }
 
-.logo-img {
-    width: 32px;
-    height: 32px;
+.logo-text {
+    color: #121417;
+    font-size: 20px;
 }
 
 .pages-buttons {
     display: flex;
-    gap: 20px;
+    gap: 28px;
 }
 
-/* --- 3. BUTON GRUPLARI VE TEMA --- */
+.pages-buttons a {
+    font-size: 16px;
+    color: #121417;
+    transition: color 0.2s;
+}
+
+/* --- 3. AUTH BUTONLARI --- */
 .auth-buttons {
     display: flex;
-    gap: 15px;
+    gap: 16px;
     align-items: center;
 }
 
-.theme-toggle-btn {
-    width: 25px;
-    height: 25px;
-    border-radius: 50%;
-    border: 2px solid #fff;
-    box-shadow: 0 0 5px rgba(0,0,0,0.2);
-    cursor: pointer;
-    margin-right: 15px;
-    transition: transform 0.2s;
-}
-
-.theme-toggle-btn:hover {
-    transform: scale(1.1);
-}
-
-/* --- 4. GİRİŞ VE KAYIT BUTONLARI --- */
+/* Login Butonu (Şeffaf ve İkonlu) */
 .login-button {
-    font-weight: bold;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 700;
     display: flex;
     align-items: center;
+    padding: 0;
+    color: #121417;
 }
 
 .login-icon {
@@ -67,26 +66,46 @@
     font-size: 20px;
 }
 
+/* Registration Butonu (Kutulu) */
 .registration-button {
-    background-color: #121417;
+    border: none;
+    cursor: pointer;
     color: white;
-    padding: 10px 20px;
-    border-radius: 10px;
+    padding: 14px 39px;
+    border-radius: 12px;
+    font-size: 16px;
+    font-weight: 700;
+    transition: opacity 0.2s;
 }
 
-/* --- 5. KULLANICI PROFİL VE LOGOUT (Giriş Yapınca) --- */
+.registration-button:hover {
+    opacity: 0.8;
+}
+
+/* Tema Değiştirme Butonu */
+.theme-toggle-btn {
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    border: 1px solid rgba(0,0,0,0.1);
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+.theme-toggle-btn:hover {
+    transform: scale(1.1);
+}
+
+/* --- 4. KULLANICI PROFİL VE LOGOUT --- */
 .user-profile-box {
     display: flex;
     align-items: center;
-    gap: 8px;
-}
-
-.user-icon {
-    font-size: 20px;
+    gap: 14px;
 }
 
 .username-text {
     font-weight: 500;
+    color: #121417;
 }
 
 .logout-btn {
@@ -97,5 +116,6 @@
     align-items: center;
     gap: 5px;
     font-size: 16px;
-    font-weight: bold;
+    font-weight: 700;
+    color: #121417;
 }
