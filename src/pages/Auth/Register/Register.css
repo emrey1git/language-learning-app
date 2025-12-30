@@ -85,7 +85,7 @@
 .reg-submit-btn {
     margin-top: 22px;
     padding: 16px;
-    background-color: #F4C550;
+     background-color: var(--active-color); 
     border: none;
     border-radius: 12px;
     font-size: 18px;

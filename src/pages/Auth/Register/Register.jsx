@@ -3,6 +3,8 @@ import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { auth } from "../../../firebase.js"; 
 import { IoClose } from "react-icons/io5"; 
 import { FiEye, FiEyeOff } from "react-icons/fi"; 
+ import { ToastContainer, toast } from 'react-toastify';
+ import 'react-toastify/dist/ReactToastify.css';
 import "./Register.css"; 
 
 const Register = ({ onClose }) => {
@@ -16,10 +18,11 @@ const Register = ({ onClose }) => {
     try {
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       await updateProfile(userCredential.user, { displayName: name });
-      alert("Registration Successful!");
+      window.location.reload();
+      toast.success("Registration Successful!");
       onClose(); 
     } catch (error) {
-      alert(error.message);
+      toast.error("Registration Failed: " + error.message);
     }
   };
 

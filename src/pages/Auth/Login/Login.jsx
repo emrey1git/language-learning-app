@@ -3,21 +3,28 @@ import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../../../firebase.js"; 
 import { IoClose } from "react-icons/io5"; 
 import { FiEye, FiEyeOff } from "react-icons/fi"; 
+import { toast } from 'react-toastify'; // ToastContainer'ı buradan sildik (App.js'de olmalı)
+import 'react-toastify/dist/ReactToastify.css';
 import "./Login.css"; 
 
 const Login = ({ onClose }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [loginError, setLoginError] = useState(""); // Hata mesajı için yeni state
 
   const handleLogin = async (e) => {
     e.preventDefault();
+    setLoginError(""); // Her denemede hatayı temizle
+    
     try {
       await signInWithEmailAndPassword(auth, email, password);
-      alert("Login Successful!");
+      toast.success("Login Successful!");
       onClose(); 
     } catch (error) {
-      alert("Error: " + error.message);
+      // Toast arkada kalsa bile artık kullanıcı bunu inputun altında görecek
+      setLoginError("Invalid email or password. Please try again.");
+      toast.error("Login Failed!");
     } 
   };
 
@@ -30,12 +37,12 @@ const Login = ({ onClose }) => {
         
         <h2 className="log-title">Log In</h2>
         <p className="log-description">
-          Welcome back! Please enter your credentials to access your account and continue your search for a teacher.
+          Welcome back! Please enter your credentials to access your account.
         </p>
 
         <form className="log-form" onSubmit={handleLogin}>
           <input 
-            className="log-input"
+            className={`log-input ${loginError ? "input-error" : ""}`}
             type="email" 
             placeholder="Email" 
             value={email}
@@ -44,7 +51,7 @@ const Login = ({ onClose }) => {
           />
           <div className="log-password-wrapper">
             <input 
-              className="log-input"
+              className={`log-input ${loginError ? "input-error" : ""}`}
               type={showPassword ? "text" : "password"} 
               placeholder="Password" 
               value={password}
@@ -59,6 +66,14 @@ const Login = ({ onClose }) => {
               {showPassword ? <FiEyeOff size={20} /> : <FiEye size={20} />}
             </button>
           </div>
+
+          {/* KIRMIZI HATA MESAJI BURADA ÇIKACAK */}
+          
+          {loginError && (
+            <p className="log-error-text">
+              {loginError}
+            </p>
+          )}
           <button type="submit" className="log-submit-btn">Log In</button>
         </form>
       </div>

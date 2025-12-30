@@ -65,7 +65,13 @@
 .log-input:focus {
     border-color: #F4C550;
 }
-
+.log-error-text {
+    color: #ff4d4f; /* Modern kırmızı tonu */
+    font-size: 14px;
+    margin: 10px 0; /* Üstten ve alttan boşluk */
+    font-weight: 500;
+    text-align: left;
+}
 /* 6. Şifre Alanı */
 .log-password-wrapper {
     position: relative;
@@ -95,7 +101,7 @@
 .log-submit-btn {
     margin-top: 22px;
     padding: 16px;
-    background-color: #F4C550;
+     background-color: var(--active-color); 
     border: none;
     border-radius: 12px;
     font-size: 18px;

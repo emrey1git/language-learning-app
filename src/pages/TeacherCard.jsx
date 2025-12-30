@@ -1,13 +1,39 @@
 import React, { useState } from "react";
 import { FiHeart } from "react-icons/fi";
 import { FaHeart } from "react-icons/fa";
-
+import { ref, set, remove } from "firebase/database";
+import { db, auth } from "../firebase"; 
 import "../pages/pagesCss/teacherCard.css";
+// MODALI IMPORT ET
+import BookingModal from "./BookingModal"; 
 
-const TeacherCard = ({ teacher }) => {
+const TeacherCard = ({ teacher, isInitialFavorite }) => {
   const [isExpanded, setIsExpanded] = useState(false);
+  const [isFavorite, setIsFavorite] = useState(isInitialFavorite);
+  // MODAL STATE'I
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const [isFavorite, setIsFavorite] = useState(false);
+  const toggleFavorite = async () => {
+    if (!auth.currentUser) {
+      alert("Please log in to add favorites!");
+      return;
+    }
+    const userId = auth.currentUser.uid;
+    const teacherId = teacher.id; 
+    const favRef = ref(db, `favorites/${userId}/${teacherId}`);
+
+    try {
+      if (isFavorite) {
+        await remove(favRef);
+        setIsFavorite(false);
+      } else {
+        await set(favRef, teacher);
+        setIsFavorite(true);
+      }
+    } catch (error) {
+      console.error("Firebase Hatası:", error);
+    }
+  };
 
   return (
     <div className="teacher-card">
@@ -33,16 +59,13 @@ const TeacherCard = ({ teacher }) => {
             <span className="stat-divider">|</span>
             <span>Price / 1 hour: <span className="price-text">{teacher.price_per_hour}$</span></span>
           </div>
+          
           <button 
-          className={`favorite-btn ${isFavorite ? "active" : ""}`} 
-          onClick={() => setIsFavorite(!isFavorite)}
-        >
-          {isFavorite ? (
-            <FaHeart size={24} /> 
-          ) : (
-            <FiHeart size={24} /> 
-          )}
-        </button>
+            className={`favorite-btn ${isFavorite ? "active" : ""}`} 
+            onClick={toggleFavorite}
+          >
+            {isFavorite ? <FaHeart size={24} color="#f4c550" /> : <FiHeart size={24} />}
+          </button>
         </div>
 
         <div className="card-body">
@@ -54,7 +77,6 @@ const TeacherCard = ({ teacher }) => {
             {isExpanded ? "Show less" : "Read more"}
           </button>
 
-          {/* DETAYLAR AÇILDIĞINDA BURASI DEVREYE GİRER */}
           {isExpanded && (
             <div className="expanded-content" style={{ marginTop: "16px" }}>
               <p className="experience-text">{teacher.experience}</p>
@@ -74,7 +96,6 @@ const TeacherCard = ({ teacher }) => {
                 ))}
               </div>
 
-              {/* SEVİYE KUTUCUKLARI ŞİMDİ DETAYLARIN İÇİNDE VE EN ALTTA */}
               <div className="level-badges" style={{ marginTop: "24px" }}>
                 {teacher.levels.map((level, i) => (
                   <span key={i} className={`level-badge ${i === 0 ? "active-level" : ""}`}>
@@ -83,14 +104,18 @@ const TeacherCard = ({ teacher }) => {
                 ))}
               </div>
 
-              <button className="book-lesson-btn" style={{ marginTop: "32px" }}>
+              {/* BUTONA TIKLANDIĞINDA MODALI AÇ */}
+              <button 
+                className="book-lesson-btn" 
+                style={{ marginTop: "32px" }}
+                onClick={() => setIsModalOpen(true)}
+              >
                 Book trial lesson
               </button>
             </div>
           )}
         </div>
 
-       
         {!isExpanded && (
           <div className="card-footer">
             <div className="level-badges">
@@ -103,6 +128,14 @@ const TeacherCard = ({ teacher }) => {
           </div>
         )}
       </div>
+
+      {/* MODALI BURADA ÇAĞIRIYORUZ */}
+      {isModalOpen && (
+        <BookingModal 
+          teacher={teacher} 
+          onClose={() => setIsModalOpen(false)} 
+        />
+      )}
     </div>
   );
 };

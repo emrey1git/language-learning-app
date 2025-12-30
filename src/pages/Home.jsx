@@ -46,7 +46,7 @@ const Home = ({ activeTheme }) => { // 1. Patronun gönderdiği rengi buradan i�
           
           <button
             className="get-started-btn"
-            style={{ backgroundColor: activeTheme.color }} // 4. Butonu buradan boyuyor
+            style={{ backgroundColor: activeTheme.color }} 
             onClick={() => navigate("/teachers")}
           >
             Get Started

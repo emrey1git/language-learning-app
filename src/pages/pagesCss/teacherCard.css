@@ -24,7 +24,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    border: 3px solid #F4C550;
+    border: 3px solid var(--active-color);
     border-radius: 50%;
     padding: 12px;
 }
@@ -107,10 +107,14 @@
     color: #121417; 
     transition: color 0.3s ease;
 }
+.favorite-btn.active  {
+    color: #ff4d4d;
+}
 
-/* Kalp aktif olduğunda (isFavorite true iken eklediğimiz .active class'ı sayesinde) */
 .favorite-btn.active svg {
-    color: #ff4d4d; /* İşte o kırmızı renk burada devreye giriyor */
+    fill: #ff4d4d !important;   
+    stroke: #ff4d4d !important; 
+    color: #ff4d4d !important;
 }
 
 .favorite-btn:hover svg {
@@ -141,29 +145,59 @@
     gap: 32px;
 }
 
-.experience-text { line-height: 1.6; color: #121417; font-size: 16px; }
+.experience-text { 
+    line-height: 1.6; 
+    color: #121417; 
+    font-size: 16px; 
+}
 
 /* Yorumlar */
-.review-item { margin-bottom: 32px; }
-.review-header { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; }
-.reviewer-avatar {
-    width: 44px; height: 44px; background-color: #f2f2f2;
-    border-radius: 50%; display: flex; align-items: center;
-    justify-content: center; font-weight: bold;
+.review-item { 
+    margin-bottom: 32px; 
 }
-.reviewer-name { font-size: 16px; color: #8A8A89; margin: 0; }
-.review-comment { color: #121417; font-weight: 500; line-height: 1.4; }
+.review-header {
+     display: flex;
+      align-items: center;
+       gap: 12px; 
+       margin-bottom: 16px; }
+.reviewer-avatar {
+    width: 44px;
+     height: 44px;
+      background-color: #f2f2f2;
+    border-radius: 50%; 
+    display: flex; 
+    align-items: center;
+    justify-content: center;
+     font-weight: bold;
+}
+.reviewer-name {
+     font-size: 16px; 
+     color: #8A8A89; 
+     margin: 0; }
+.review-comment { 
+    font-weight: 500; 
+    line-height: 1.4; }
 
 .book-lesson-btn {
     width: fit-content; padding: 16px 48px;
-    background-color: #F4C550; border: none; border-radius: 12px;
+     background-color: var(--active-color);
+      border: none; border-radius: 12px;
     font-size: 18px; font-weight: 700; cursor: pointer;
 }
 
 /* --- FOOTER VE BADGELER --- */
-.level-badges { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 24px; }
+.level-badges { 
+    display: flex; 
+    flex-wrap: wrap; 
+    gap: 8px; 
+    margin-top: 24px; }
 .level-badge {
-    padding: 8px 12px; border-radius: 35px;
-    border: 1px solid rgba(18, 20, 23, 0.2); font-size: 14px;
+    padding: 8px 12px; 
+    border-radius: 35px;
+    border: 1px solid rgba(18, 20, 23, 0.2); 
+    font-size: 14px;
 }
-.active-level { background-color: #F4C550; border: none; }
+.active-level { 
+    background-color: var(--active-color);
+    order: none;
+ }

@@ -119,3 +119,87 @@
     font-weight: 700;
     color: #121417;
 }
+/* logout modal */
+/* Arka planı karartan ama bulanıklaştıran modern katman */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(17, 16, 28, 0.4); /* Çok koyu olmayan, şık bir karartma */
+  backdrop-filter: blur(4px); /* Arka planı hafifçe bulandırır, derinlik katar */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}
+
+/* Modal kutusu */
+.modal-content {
+  background: #ffffff;
+  padding: 48px;
+  border-radius: 30px; /* Senin projedeki kartların yumuşaklığına uygun */
+  max-width: 566px;
+  width: 90%;
+  text-align: center;
+  box-shadow: 0px 20px 40px rgba(0, 0, 0, 0.1);
+  position: relative;
+}
+
+.modal-content p {
+  font-size: 24px;
+  line-height: 1.2;
+  font-weight: 500;
+  color: #121417;
+  margin-bottom: 32px;
+}
+
+/* Buton kapsayıcı */
+.modal-actions {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+}
+
+/* "Evet, Çıkış Yap" Butonu - Senin ana buton tasarımına uygun */
+.confirm-btn {
+  padding: 16px 48px;
+  border-radius: 12px;
+  border: none;
+ background-color: var(--active-color); 
+  color: #121417;
+  font-size: 18px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.confirm-btn:hover {
+  background-color: #ffdc86; /* Üzerine gelince parlasın */
+}
+
+/* "İptal" Butonu - Daha sakin ve gri tonlu */
+.cancel-btn {
+  padding: 16px 48px;
+  border-radius: 12px;
+  border: 1px solid rgba(18, 20, 23, 0.1);
+  background-color: transparent;
+  color: #121417;
+  font-size: 18px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.cancel-btn:hover {
+  background-color: #f8f8f8;
+  border-color: #121417;
+}
+
+/* Mobilde butonlar alt alta gelsin diye (isteğe bağlı) */
+@media (max-width: 480px) {
+  .modal-actions {
+    flex-direction: column;
+  }
+}

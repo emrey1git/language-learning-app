@@ -32,7 +32,7 @@ body {
     display: block;
     margin: 40px auto; 
     padding: 16px 48px;
-    background-color: #F4C550;
+    background-color: var(--active-color);
     border: none;
     border-radius: 12px;
     font-size: 18px;
