@@ -7,6 +7,7 @@ const Favorites = () => {
   const [favoriteTeachers, setFavoriteTeachers] = useState([]);
   const [loading, setLoading] = useState(true);
 
+
   useEffect(() => {
     if (!auth.currentUser) return;
 
@@ -34,6 +35,8 @@ const Favorites = () => {
 
   return (
     <div className="teachers-page-container">
+     
+
       <h2>My Favorite Teachers</h2>
       <div className="teachers-list">
         {favoriteTeachers.length > 0 ? (

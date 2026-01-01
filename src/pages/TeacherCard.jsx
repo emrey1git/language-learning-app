@@ -4,13 +4,12 @@ import { FaHeart } from "react-icons/fa";
 import { ref, set, remove } from "firebase/database";
 import { db, auth } from "../firebase"; 
 import "../pages/pagesCss/teacherCard.css";
-// MODALI IMPORT ET
 import BookingModal from "./BookingModal"; 
 
-const TeacherCard = ({ teacher, isInitialFavorite }) => {
+// 1. ADIM: activeFilterLevel prop'unu buraya ekledik
+const TeacherCard = ({ teacher, isInitialFavorite, activeFilterLevel }) => {
   const [isExpanded, setIsExpanded] = useState(false);
   const [isFavorite, setIsFavorite] = useState(isInitialFavorite);
-  // MODAL STATE'I
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const toggleFavorite = async () => {
@@ -31,7 +30,7 @@ const TeacherCard = ({ teacher, isInitialFavorite }) => {
         setIsFavorite(true);
       }
     } catch (error) {
-      console.error("Firebase Hatası:", error);
+      console.error("Firebase Error", error);
     }
   };
 
@@ -98,13 +97,16 @@ const TeacherCard = ({ teacher, isInitialFavorite }) => {
 
               <div className="level-badges" style={{ marginTop: "24px" }}>
                 {teacher.levels.map((level, i) => (
-                  <span key={i} className={`level-badge ${i === 0 ? "active-level" : ""}`}>
+                  /* 2. ADIM: Burada i === 0 yerine filtre kontrolü yapıyoruz */
+                  <span 
+                    key={i} 
+                    className={`level-badge ${level === activeFilterLevel ? "active-level" : ""}`}
+                  >
                     #{level}
                   </span>
                 ))}
               </div>
 
-              {/* BUTONA TIKLANDIĞINDA MODALI AÇ */}
               <button 
                 className="book-lesson-btn" 
                 style={{ marginTop: "32px" }}
@@ -120,7 +122,11 @@ const TeacherCard = ({ teacher, isInitialFavorite }) => {
           <div className="card-footer">
             <div className="level-badges">
               {teacher.levels.map((level, i) => (
-                <span key={i} className={`level-badge ${i === 0 ? "active-level" : ""}`}>
+                /* 3. ADIM: Aynı değişikliği buradaki badge'ler için de yaptık */
+                <span 
+                  key={i} 
+                  className={`level-badge ${level === activeFilterLevel ? "active-level" : ""}`}
+                >
                   #{level}
                 </span>
               ))}
@@ -129,7 +135,6 @@ const TeacherCard = ({ teacher, isInitialFavorite }) => {
         )}
       </div>
 
-      {/* MODALI BURADA ÇAĞIRIYORUZ */}
       {isModalOpen && (
         <BookingModal 
           teacher={teacher} 

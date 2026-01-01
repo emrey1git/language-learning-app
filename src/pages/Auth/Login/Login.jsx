@@ -23,7 +23,7 @@ const Login = ({ onClose }) => {
       onClose(); 
     } catch (error) {
       // Toast arkada kalsa bile artık kullanıcı bunu inputun altında görecek
-      setLoginError("Invalid email or password. Please try again.");
+      setLoginError("Invalid email or password. Please try again.", error);
       toast.error("Login Failed!");
     } 
   };
