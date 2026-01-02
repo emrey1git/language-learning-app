@@ -7,7 +7,6 @@ const Favorites = () => {
   const [favoriteTeachers, setFavoriteTeachers] = useState([]);
   const [loading, setLoading] = useState(true);
 
-
   useEffect(() => {
     if (!auth.currentUser) return;
 
@@ -15,10 +14,9 @@ const Favorites = () => {
     const unsubscribe = onValue(favRef, (snapshot) => {
       const data = snapshot.val();
       if (data) {
-        // Obje olarak gelen favorileri listeye çeviriyoruz
-        const favList = Object.keys(data).map(key => ({
+        const favList = Object.keys(data).map((key) => ({
           id: key,
-          ...data[key]
+          ...data[key],
         }));
         setFavoriteTeachers(favList);
       } else {
@@ -35,16 +33,14 @@ const Favorites = () => {
 
   return (
     <div className="teachers-page-container">
-     
-
       <h2>My Favorite Teachers</h2>
       <div className="teachers-list">
         {favoriteTeachers.length > 0 ? (
           favoriteTeachers.map((teacher) => (
-            <TeacherCard 
-              key={teacher.id} 
-              teacher={teacher} 
-              isInitialFavorite={true} 
+            <TeacherCard
+              key={teacher.id}
+              teacher={teacher}
+              isInitialFavorite={true}
             />
           ))
         ) : (

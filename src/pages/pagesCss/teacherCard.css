@@ -1,4 +1,3 @@
-/* --- KART ANA YAPI --- */
 .teacher-card {
     display: flex;
     flex-direction: row;
@@ -16,7 +15,6 @@
     transform: translateY(-4px);
 }
 
-/* --- SOL TARAF (FOTOĞRAF) --- */
 .photo-container {
     position: relative;
     width: 120px;
@@ -24,9 +22,10 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    border: 3px solid var(--active-color);
+    border: 3px solid var(--active-color, #F4C550);
     border-radius: 50%;
     padding: 12px;
+    flex-shrink: 0;
 }
 
 .teacher-avatar {
@@ -47,7 +46,6 @@
     border-radius: 50%;
 }
 
-/* --- SAĞ TARAF VE HEADER --- */
 .card-right {
     display: flex;
     flex-direction: column;
@@ -92,6 +90,7 @@
     color: #38CD3E;
     font-weight: 600;
 }
+
 .favorite-btn {
     background: transparent;
     border: none;
@@ -102,13 +101,10 @@
     justify-content: center;
     transition: transform 0.2s ease;
 }
-/* Boş kalbin varsayılan çizgi rengi */
+
 .favorite-btn svg {
     color: #121417; 
     transition: color 0.3s ease;
-}
-.favorite-btn.active  {
-    color: #ff4d4d;
 }
 
 .favorite-btn.active svg {
@@ -118,9 +114,9 @@
 }
 
 .favorite-btn:hover svg {
-    color: #ff4d4d; /* Üzerine gelince de kırmızıya göz kırpsın */
+    color: #ff4d4d;
 }
-/* --- GÖVDE VE GENİŞLEYEN İÇERİK --- */
+
 .card-body {
     display: flex;
     flex-direction: column;
@@ -151,53 +147,121 @@
     font-size: 16px; 
 }
 
-/* Yorumlar */
 .review-item { 
     margin-bottom: 32px; 
 }
+
 .review-header {
      display: flex;
-      align-items: center;
-       gap: 12px; 
-       margin-bottom: 16px; }
+     align-items: center;
+     gap: 12px; 
+     margin-bottom: 16px; 
+}
+
 .reviewer-avatar {
     width: 44px;
-     height: 44px;
-      background-color: #f2f2f2;
+    height: 44px;
+    background-color: #f2f2f2;
     border-radius: 50%; 
     display: flex; 
     align-items: center;
     justify-content: center;
-     font-weight: bold;
+    font-weight: bold;
 }
+
 .reviewer-name {
      font-size: 16px; 
      color: #8A8A89; 
-     margin: 0; }
+     margin: 0; 
+}
+
 .review-comment { 
     font-weight: 500; 
-    line-height: 1.4; }
+    line-height: 1.4; 
+}
 
 .book-lesson-btn {
     width: fit-content; padding: 16px 48px;
-     background-color: var(--active-color);
-      border: none; border-radius: 12px;
+    background-color: var(--active-color, #F4C550);
+    border: none; border-radius: 12px;
     font-size: 18px; font-weight: 700; cursor: pointer;
 }
 
-/* --- FOOTER VE BADGELER --- */
 .level-badges { 
     display: flex; 
     flex-wrap: wrap; 
     gap: 8px; 
-    margin-top: 24px; }
+    margin-top: 24px; 
+}
+
 .level-badge {
     padding: 8px 12px; 
     border-radius: 35px;
     border: 1px solid rgba(18, 20, 23, 0.2); 
     font-size: 14px;
 }
+
 .active-level { 
-    background-color: var(--active-color);
-    order: none;
- }
+    background-color: var(--active-color, #F4C550);
+    border: none;
+}
+
+/* --- RESPONSIVE TASARIM --- */
+
+@media (max-width: 992px) {
+    .teacher-card {
+        gap: 24px;
+    }
+    
+    .header-stats {
+        flex-wrap: wrap;
+        justify-content: flex-end;
+    }
+}
+
+@media (max-width: 768px) {
+    .teacher-card {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+
+    .card-header {
+        flex-direction: column;
+        align-items: center;
+        gap: 12px;
+    }
+
+    .header-stats {
+        margin: 10px 0;
+        justify-content: center;
+    }
+
+    .read-more-btn, .book-lesson-btn {
+        align-self: center;
+    }
+
+    .level-badges {
+        justify-content: center;
+    }
+}
+
+@media (max-width: 480px) {
+    .teacher-card {
+        padding: 16px;
+    }
+
+    .teacher-name {
+        font-size: 20px;
+    }
+
+    .header-stats {
+        font-size: 14px;
+        gap: 4px;
+    }
+
+    .book-lesson-btn {
+        width: 100%;
+        padding: 14px 24px;
+    }
+}

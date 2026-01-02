@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { ref, onValue } from "firebase/database";
+import { ref, onValue, query, limitToFirst, orderByKey, startAt } from "firebase/database";
 import { db, auth } from "../firebase.js"; 
 import TeacherCard from "./TeacherCard.jsx"; 
 import "../pages/pagesCss/teachers.css";
@@ -7,84 +7,90 @@ import "../pages/pagesCss/teachers.css";
 const Teachers = () => {
   const [teachers, setTeachers] = useState([]);
   const [favorites, setFavorites] = useState({});
-  const [visibleCount, setVisibleCount] = useState(4);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [lastKey, setLastKey] = useState(null);
+  const [hasMore, setHasMore] = useState(true);
+
   const [selectedLanguage, setSelectedLanguage] = useState("");
   const [selectedLevel, setSelectedLevel] = useState("");
   const [selectedPrice, setSelectedPrice] = useState("");
 
-  // DATA FETCHING SECTION
   useEffect(() => {
-    const teachersRef = ref(db, "/");
-    const unsubscribeTeachers = onValue(teachersRef, (snapshot) => {
-      try {
-        const data = snapshot.val();
-        if (data) {
-          const source = data.teachers ? data.teachers : data;
-          let teachersArray = [];
-          
-          if (Array.isArray(source)) {
-            teachersArray = source.filter(t => t).map((t, index) => ({
-              id: t.id ? t.id.toString() : index.toString(),
-              ...t
-            }));
-          } else {
-            teachersArray = Object.keys(source)
-              .filter(key => key !== 'favorites')
-              .map(key => ({
-                id: key,
-                ...source[key]
-              }));
-          }
-          setTeachers(teachersArray);
-        } else {
-          setError("No teacher data found in the database.");
-        }
-      } catch (err) {
-        setError("An error occurred while processing the data.",err);
-      }
-      setLoading(false);
-    });
-
+    fetchTeachers();
+    
     let unsubscribeFavs = () => {};
     if (auth.currentUser) {
       const favRef = ref(db, `favorites/${auth.currentUser.uid}`);
       unsubscribeFavs = onValue(favRef, (snapshot) => {
-        const favData = snapshot.val() || {};
-        setFavorites(favData);
+        setFavorites(snapshot.val() || {});
       });
     }
-
-    return () => {
-      unsubscribeTeachers();
-      unsubscribeFavs();
-    };
+    return () => unsubscribeFavs();
   }, []);
 
-  if (loading) return <div className="loading">Firebase verileri yükleniyor...</div>;
-  if (error) return <div className="error-message" style={{color: 'red', padding: '20px'}}>{error}</div>;
+  const fetchTeachers = () => {
+    setLoading(true);
+    const firstQuery = query(ref(db, "/"), orderByKey(), limitToFirst(4));
+    
+    onValue(firstQuery, (snapshot) => {
+      const data = snapshot.val();
+      if (data) {
+        const teachersArray = Object.keys(data).map(key => ({ id: key, ...data[key] }));
+        setTeachers(teachersArray);
+        setLastKey(teachersArray[teachersArray.length - 1].id);
+        if (teachersArray.length < 4) setHasMore(false);
+      } else {
+        setError("No teacher data found.");
+      }
+      setLoading(false);
+    }, { onlyOnce: true });
+  };
 
-  // FILTER LOGIC SECTION
+  const loadMore = () => {
+  if (!lastKey || loading) return;
+
+   const nextQuery = query(
+    ref(db, "/"),
+    orderByKey(),
+    startAt(lastKey), 
+    limitToFirst(5)   
+  );
+
+    onValue(nextQuery, (snapshot) => {
+      const data = snapshot.val();
+      if (data) {
+        const nextBatch = Object.keys(data)
+          .map(key => ({ id: key, ...data[key] }))
+          .filter(t => t.id !== lastKey);
+
+        if (nextBatch.length === 0) {
+          setHasMore(false);
+        } else {
+          setTeachers(prev => [...prev, ...nextBatch]);
+          setLastKey(nextBatch[nextBatch.length - 1].id);
+          if (nextBatch.length < 4) setHasMore(false);
+        }
+      } else {
+        setHasMore(false);
+      }
+    }, { onlyOnce: true });
+  };
+
   const filteredTeachers = teachers.filter((teacher) => {
-    const matchLanguage = selectedLanguage === "" || 
-      (teacher.languages && teacher.languages.includes(selectedLanguage));
-    
-    
-    const matchLevel = selectedLevel === "" ||
-      (teacher.levels && teacher.levels.includes(selectedLevel));
-
-    const matchPrice = selectedPrice === "" ||
-      Number(teacher.price_per_hour) <= Number(selectedPrice);
-
+    const matchLanguage = !selectedLanguage || (teacher.languages && teacher.languages.includes(selectedLanguage));
+    const matchLevel = !selectedLevel || (teacher.levels && teacher.levels.includes(selectedLevel));
+    const matchPrice = !selectedPrice || Number(teacher.price_per_hour) <= Number(selectedPrice);
     return matchLanguage && matchLevel && matchPrice;
   });
 
-  // RENDER SECTION
+  if (loading && teachers.length === 0) return <div className="loading">Loading...</div>;
+  if (error) return <div className="error-message">{error}</div>;
+
   return (
     <div className="teachers-page-container">
       <div className="filters-container">
-        <div className="filter-item filter-languages">
+        <div className="filter-item">
           <label>Languages</label>
           <select onChange={(e) => setSelectedLanguage(e.target.value)}>
             <option value="">All</option>
@@ -99,7 +105,7 @@ const Teachers = () => {
           </select>
         </div>
 
-        <div className="filter-item filter-level">
+        <div className="filter-item">
           <label>Level of knowledge</label>
           <select onChange={(e) => setSelectedLevel(e.target.value)}>
             <option value="">All</option>
@@ -112,7 +118,7 @@ const Teachers = () => {
           </select>
         </div>
 
-        <div className="filter-item filter-price">
+        <div className="filter-item">
           <label>Price</label>
           <select onChange={(e) => setSelectedPrice(e.target.value)}>
             <option value="">All</option>
@@ -127,34 +133,23 @@ const Teachers = () => {
 
       <div className="teachers-list">
         {filteredTeachers.length > 0 ? (
-          filteredTeachers.slice(0, visibleCount).map((teacher) => (
+          filteredTeachers.map((teacher) => (
             <TeacherCard 
               key={teacher.id} 
               teacher={teacher} 
               isInitialFavorite={!!favorites[teacher.id]} 
               activeFilterLevel={selectedLevel}
-              
             />
           ))
         ) : (
-          <div style={{
-      gridColumn: "1 / -1", 
-      textAlign: "center",
-      padding: "100px 20px",
-      fontSize: "20px",
-      color: "#121417",
-      fontWeight: "500",
-      backgroundColor: "#fff",
-      borderRadius: "14px",
-      border: "1px dashed #ccc" 
-    }}>
-      <p>No teachers matching your criteria were found. Please try different filters.</p>
-    </div>
+          <div className="no-results">
+            <p>No teachers matching your criteria were found.</p>
+          </div>
         )}
       </div>
       
-      {visibleCount < filteredTeachers.length && (
-        <button className="load-more-btn" onClick={() => setVisibleCount(p => p + 4)}>
+      {hasMore && (
+        <button className="load-more-btn" onClick={loadMore}>
           Load More
         </button>
       )}

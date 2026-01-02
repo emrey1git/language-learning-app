@@ -6,7 +6,6 @@ import { db, auth } from "../firebase";
 import "../pages/pagesCss/teacherCard.css";
 import BookingModal from "./BookingModal"; 
 
-// 1. ADIM: activeFilterLevel prop'unu buraya ekledik
 const TeacherCard = ({ teacher, isInitialFavorite, activeFilterLevel }) => {
   const [isExpanded, setIsExpanded] = useState(false);
   const [isFavorite, setIsFavorite] = useState(isInitialFavorite);
@@ -97,7 +96,6 @@ const TeacherCard = ({ teacher, isInitialFavorite, activeFilterLevel }) => {
 
               <div className="level-badges" style={{ marginTop: "24px" }}>
                 {teacher.levels.map((level, i) => (
-                  /* 2. ADIM: Burada i === 0 yerine filtre kontrolü yapıyoruz */
                   <span 
                     key={i} 
                     className={`level-badge ${level === activeFilterLevel ? "active-level" : ""}`}
@@ -122,7 +120,6 @@ const TeacherCard = ({ teacher, isInitialFavorite, activeFilterLevel }) => {
           <div className="card-footer">
             <div className="level-badges">
               {teacher.levels.map((level, i) => (
-                /* 3. ADIM: Aynı değişikliği buradaki badge'ler için de yaptık */
                 <span 
                   key={i} 
                   className={`level-badge ${level === activeFilterLevel ? "active-level" : ""}`}

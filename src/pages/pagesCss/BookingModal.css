@@ -1,4 +1,3 @@
-/* --- DIŞ ARKA PLAN (PORTAL İÇİN EN ÜSTTE) --- */
 .book-modal-overlay {
     position: fixed;
     top: 0;
@@ -14,7 +13,6 @@
     z-index: 2000000 !important; 
 }
 
-/* --- MODAL ANA KART --- */
 .book-modal-content {
     background-color: #ffffff !important;
     padding: 64px;
@@ -28,17 +26,16 @@
     animation: modalAppear 0.3s ease-out;
 }
 
-/* --- NARİN VE HOŞ SCROLLBAR TASARIMI --- */
 .book-modal-content::-webkit-scrollbar {
-    width: 6px; /* İncecik bir görünüm */
+    width: 6px;
 }
 
 .book-modal-content::-webkit-scrollbar-track {
-    background: transparent; /* Arka planı gizliyoruz */
+    background: transparent;
 }
 
 .book-modal-content::-webkit-scrollbar-thumb {
-    background: rgba(18, 20, 23, 0.1); /* Çok hafif gri ton */
+    background: rgba(18, 20, 23, 0.1);
     border-radius: 10px;
 }
 
@@ -76,7 +73,6 @@
     margin-bottom: 40px;
 }
 
-/* --- ÖĞRETMEN BÖLGESİ --- */
 .book-teacher-info {
     display: flex;
     gap: 14px;
@@ -104,11 +100,10 @@
     color: #121417;
 }
 
-/* --- RADYO BUTONLARI (ALT ALTA VE DÜZENLİ) --- */
 .book-radio-group {
     display: flex;
-    flex-direction: column; /* Alt alta dizme */
-    gap: 12px; /* Aralarındaki boşluk */
+    flex-direction: column;
+    gap: 12px;
     margin-bottom: 40px;
 }
 
@@ -134,7 +129,7 @@ input[type="radio"] {
 }
 
 input[type="radio"]:checked {
-    border-color: var(--active-color);
+    border-color: var(--active-color, #F4C550);
 }
 
 input[type="radio"]:checked::after {
@@ -143,11 +138,10 @@ input[type="radio"]:checked::after {
     top: 50%; left: 50%;
     transform: translate(-50%, -50%);
     width: 10px; height: 10px;
-    background-color: var(--active-color);
+    background-color: var(--active-color, #F4C550);
     border-radius: 50%;
 }
 
-/* --- INPUT ALANLARI --- */
 .book-inputs input {
     width: 100%;
     padding: 16px;
@@ -159,14 +153,13 @@ input[type="radio"]:checked::after {
 }
 
 .book-inputs input:focus {
-    border-color: var(--active-color);
+    border-color: var(--active-color, #F4C550);
 }
 
-/* --- SUBMIT BUTONU --- */
 .book-submit-btn {
     width: 100%;
     padding: 16px;
-    background-color: var(--active-color);
+    background-color: var(--active-color, #F4C550);
     color: #121417;
     border: none;
     border-radius: 12px;
@@ -179,4 +172,46 @@ input[type="radio"]:checked::after {
 
 .book-submit-btn:hover {
     filter: brightness(0.9);
+}
+
+/* --- RESPONSIVE AYARLAR --- */
+
+@media (max-width: 768px) {
+    .book-modal-content {
+        padding: 40px 24px;
+        border-radius: 20px;
+        max-height: 90vh;
+    }
+
+    .book-title {
+        font-size: 28px;
+    }
+
+    .book-desc {
+        font-size: 14px;
+        margin-bottom: 24px;
+    }
+
+    .book-teacher-info {
+        margin-bottom: 24px;
+    }
+
+    .book-radio-group {
+        margin-bottom: 24px;
+    }
+}
+
+@media (max-width: 480px) {
+    .book-modal-content {
+        padding: 32px 16px;
+    }
+
+    .book-title {
+        font-size: 24px;
+    }
+
+    .book-submit-btn {
+        font-size: 16px;
+        padding: 14px;
+    }
 }

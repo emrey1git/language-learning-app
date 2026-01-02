@@ -1,6 +1,6 @@
 import { initializeApp } from "firebase/app";
-import { getDatabase } from "firebase/database"; // Veritabanı için gerekli
-import { getAuth } from "firebase/auth";         // Giriş/Çıkış için gerekli
+import { getDatabase } from "firebase/database"; 
+import { getAuth } from "firebase/auth";        
 
 const firebaseConfig = {
   apiKey: "AIzaSyDsKPsbC5lotVXNMwR9Y5-DExI2IFzLJhE",
@@ -13,9 +13,7 @@ const firebaseConfig = {
   measurementId: "G-Q51RBP9DXX"
 };
 
-// Firebase'i başlat
 const app = initializeApp(firebaseConfig);
 
-// Diğer dosyalardan ulaşabilmek için "export" (dışa aktar) yapıyoruz
 export const db = getDatabase(app);
 export const auth = getAuth(app);

@@ -29,7 +29,6 @@ const themes = [
   { color: "rgba(240, 170, 141, 1)", id: "orange" },
 ];
 
-// MODAL BİLEŞENİ (Dışarıda tanımlanması daha temizdir)
 const LogoutModal = ({ confirm, cancel }) => (
   <div className="modal-overlay" onClick={cancel}> 
     <div className="modal-content">
@@ -139,7 +138,6 @@ useEffect(() => {
         </div>
       </nav>
 
-      {/* MODAL KATMANLARI */}
       {isLoginOpen && <Login onClose={() => setIsLoginOpen(false)} />}
       {isRegisterOpen && <Register onClose={() => setIsRegisterOpen(false)} />}
       {isLogoutModalOpen && (
@@ -149,7 +147,6 @@ useEffect(() => {
         />
       )}
 
-      {/* TÜM ROTALAR TEK BİR ROUTES BLOĞUNDA */}
       <Routes>
         <Route path="/" element={<Home activeTheme={activeTheme} />} />
         <Route path="/teachers" element={<Teachers activeTheme={activeTheme} />} />

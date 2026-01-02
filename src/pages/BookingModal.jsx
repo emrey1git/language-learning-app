@@ -1,19 +1,55 @@
-import React, { useEffect, useState } from "react";
-import { createPortal } from "react-dom"; // Portal için gerekli
+import React, { useEffect } from "react";
+import { createPortal } from "react-dom";
 import { IoClose } from "react-icons/io5";
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from "yup";
+import { toast } from "react-toastify";
 import "../pages/pagesCss/BookingModal.css";
 
-const BookingModal = ({ teacher, onClose }) => {
-  const [reason, setReason] = useState("Career and business");
+const schema = yup.object().shape({
+  reason: yup.string().required("Please select a reason"),
+  fullName: yup.string().required("Full name is required"),
+  email: yup.string().email("Invalid email").required("Email is required"),
+  phone: yup
+    .string()
+    .matches(/^[0-9]+$/, "Must be only digits")
+    .min(10, "Minimum 10 digits")
+    .required("Phone number is required"),
+});
 
+const BookingModal = ({ teacher, onClose }) => {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    resolver: yupResolver(schema),
+    defaultValues: {
+      reason: "Career and business",
+    },
+  });
+
+ 
   useEffect(() => {
-    document.body.style.overflow = "hidden";
+    const handleEsc = (event) => {
+      if (event.keyCode === 27) onClose();
+    };
+    window.addEventListener("keydown", handleEsc);
+    document.body.style.overflow = "hidden"; 
+
     return () => {
+      window.removeEventListener("keydown", handleEsc);
       document.body.style.overflow = "auto";
     };
-  }, []);
+  }, [onClose]);
 
-  // Mevcut JSX yapını bir değişkene alıyoruz
+  const onSubmit = (data) => {
+    
+    toast.success("Lesson booked successfully!", data);
+    onClose();
+  };
+
   const modalHTML = (
     <div className="book-modal-overlay" onClick={onClose}>
       <div className="book-modal-content" onClick={(e) => e.stopPropagation()}>
@@ -37,16 +73,13 @@ const BookingModal = ({ teacher, onClose }) => {
             <p className="book-teacher-name">{teacher.name}</p>
           </div>
         </div>
+
         <h3 className="book-subtitle">
           What is your main reason for learning English?
         </h3>
 
-        <form
-          className="book-form"
-          onSubmit={(e) => {
-            e.preventDefault();
-          }}
-        >
+        <form className="book-form" onSubmit={handleSubmit(onSubmit)}>
+          {/* RADIO BUTTONS */}
           <div className="book-radio-group">
             {[
               "Career and business",
@@ -58,21 +91,47 @@ const BookingModal = ({ teacher, onClose }) => {
               <label key={item} className="book-radio-label">
                 <input
                   type="radio"
-                  name="reason"
                   value={item}
-                  checked={reason === item}
-                  onChange={(e) => setReason(e.target.value)}
+                  {...register("reason")}
                 />
                 <span className="custom-radio"></span>
                 {item}
               </label>
             ))}
+            {errors.reason && <p className="error-message">{errors.reason.message}</p>}
           </div>
 
+          {/* INPUTS WITH VALIDATION */}
           <div className="book-inputs">
-            <input type="text" placeholder="Full Name" required />
-            <input type="email" placeholder="Email" required />
-            <input type="tel" placeholder="Phone number" required />
+            <div className="input-wrapper">
+              <input 
+                {...register("fullName")} 
+                type="text" 
+                placeholder="Full Name" 
+                className={errors.fullName ? "input-error" : ""}
+              />
+              {errors.fullName && <p className="error-message">{errors.fullName.message}</p>}
+            </div>
+
+            <div className="input-wrapper">
+              <input 
+                {...register("email")} 
+                type="email" 
+                placeholder="Email" 
+                className={errors.email ? "input-error" : ""}
+              />
+              {errors.email && <p className="error-message">{errors.email.message}</p>}
+            </div>
+
+            <div className="input-wrapper">
+              <input 
+                {...register("phone")} 
+                type="tel" 
+                placeholder="Phone number" 
+                className={errors.phone ? "input-error" : ""}
+              />
+              {errors.phone && <p className="error-message">{errors.phone.message}</p>}
+            </div>
           </div>
 
           <button type="submit" className="book-submit-btn">
@@ -83,7 +142,6 @@ const BookingModal = ({ teacher, onClose }) => {
     </div>
   );
 
-  // Bu kısmı portal ile body'ye gönderiyoruz
   return createPortal(modalHTML, document.body);
 };
 

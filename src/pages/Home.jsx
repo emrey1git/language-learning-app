@@ -7,10 +7,9 @@ import homePagesImageOrange from "../assets/homePagesImageOrange.png";
 
 import "./pagesCss/home.css";
 
-const Home = ({ activeTheme }) => { // 1. Patronun gönderdiği rengi buradan içeri alıyoruz
+const Home = ({ activeTheme }) => {
   const navigate = useNavigate();
 
-  // 2. Renk ile Fotoğrafı eşleştiren basit bir sözlük yapalım
   const themeImages = {
     "rgba(244, 197, 80, 1)": homePagesImageYellow,
     "rgba(159, 186, 174, 1)": homePagesImageGreen,
@@ -19,7 +18,6 @@ const Home = ({ activeTheme }) => { // 1. Patronun gönderdiği rengi buradan i�
     "rgba(240, 170, 141, 1)": homePagesImageOrange
   };
 
-  // Şu anki aktif rengin fotoğrafını buluyoruz
   const currentImg = themeImages[activeTheme.color];
 
   return (
@@ -54,7 +52,6 @@ const Home = ({ activeTheme }) => { // 1. Patronun gönderdiği rengi buradan i�
         </div>
 
         <div className="home-image-container">
-          {/* 5. Resmi buradan değiştiriyor */}
           <img src={currentImg} alt="Tutor" className="home-image" />
         </div>
       </div>
